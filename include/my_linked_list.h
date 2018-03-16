@@ -1,25 +1,29 @@
 #ifndef MY_LINKED_LIST_H
     #define MY_LINKED_LIST_H
-    
-struct list_head
-{
-    struct list_head *next;
-    struct list_head *previous;
-};
-typedef struct list_head LIST_HEAD;
 
+#include <stddef.h>
+
+struct node
+{
+    void *data;
+    struct node *next;
+    struct node *previous;
+};
+typedef struct node NODE;
 
 struct linked_list
 {
-    void *data;
-    struct list_head list; //list structure
+    NODE *head;
+    NODE *tail;
 };
 typedef struct linked_list LLIST;
 
-
-int add_node(void);
+void add_node(LLIST *dest, NODE *to_add);
+void init_node(void *data,
+                NODE *new_node,
+                size_t data_size);
 int remove_node(void);
-int create_list(void);
+void init_llist(LLIST *new_list);
 int empty_list(void);
 
 #endif
