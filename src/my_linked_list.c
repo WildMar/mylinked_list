@@ -3,17 +3,33 @@
 
 #include "my_linked_list.h"
 
-void add_node(LLIST *dest, NODE *to_add)
+void add_node(NODE *head, NODE *to_add)
 {
-    if((*dest).head == NULL && (*dest).tail == NULL)
+    NODE *current = head;
+    NODE *prev = head;
+    if(head == to_add)
     {
-        // this is an empty list. 
-        (*dest).head = (to_add);
-        (*dest).tail = (to_add);
+        // this is the first element
         return;
     }
-
-    (*dest).tail = (to_add);
+    
+    if(head->next == NULL)
+    {
+        // this is the second element
+        head->next = to_add;
+    }
+    else
+    {
+        while(current != NULL)
+        {
+            // go to the end of the list
+            prev = current;
+            current = current->next;
+        }
+    }
+    prev->next = to_add;
+    to_add->previous = prev;
+    to_add->next = NULL;
 }
 
 int remove_node()
@@ -24,29 +40,24 @@ int remove_node()
 
 void init_node(void *data, NODE *new_node, size_t data_size)
 {
-    NODE *temp_node = malloc(data_size);
-    temp_node->data = data;
-    temp_node->next = NULL;
-    temp_node->previous = NULL;
-    
-    (*new_node) = *temp_node;
+    new_node->data = data;
+    new_node->next = NULL;
+    new_node->previous = NULL;
 }
 
-void init_llist(LLIST *new_list)
+void print_list(NODE *head, void (func)(void *))
 {
-    printf("CREATING LIST\n");
-    LLIST *temp_list = malloc(sizeof(LLIST));
-    temp_list->head = NULL;
-    temp_list->tail = NULL;
-    (*new_list) = *temp_list;
-}
-
-void print_list(LLIST *to_print, void (*func)(void *))
-{
-    NODE *tmp = (*to_print).head;
+ 
+    NODE *tmp = malloc(sizeof(NODE));
+    tmp = head;
+    if(tmp == NULL)
+    {
+        printf("NULL\n");
+        return;
+    }
     while(tmp != NULL)
     {
-        (*func)(tmp->data);
+        (func)((tmp->data));
         tmp = tmp->next;
     }
 }
