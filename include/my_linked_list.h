@@ -11,11 +11,11 @@ struct node
 };
 typedef struct node NODE;
 
-void add_node(NODE *head, NODE *to_add);
+int add_node(NODE *head, NODE *to_add);
 void init_node(void *data,
-                NODE *new_node,
-                size_t data_size);
-int remove_node(void);
+                NODE *new_node);
+int remove_node(NODE *head, void *to_remove, 
+                int (func)(void *, void *));
 int empty_list(void);
 
 #endif

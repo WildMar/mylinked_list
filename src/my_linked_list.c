@@ -3,10 +3,18 @@
 
 #include "my_linked_list.h"
 
-void add_node(NODE *head, NODE *to_add)
+
+// add node to linked list
+int add_node(NODE *head, NODE *to_add)
 {
     NODE *current = head;
     NODE *prev = head;
+    if(head == NULL)
+    {
+        fprintf(stderr, "No linked list to \
+                        add node to");
+        return -1;
+    }
     if(head == to_add)
     {
         // this is the first element
@@ -30,36 +38,71 @@ void add_node(NODE *head, NODE *to_add)
     prev->next = to_add;
     to_add->previous = prev;
     to_add->next = NULL;
-}
-
-int remove_node()
-{
-    printf("REMOVING NODE\n");
+    
     return 0;
 }
 
-void init_node(void *data, NODE *new_node, size_t data_size)
+int remove_node(NODE *head, void *to_remove, 
+                int (func)(void *, void *))
 {
+    printf("REMOVING NODE\n");
+    NODE *current = head;
+    NODE *previous = head;
+    
+    while(1)
+    {
+        // user must create compare data function
+        if((func)(to_remove, current->data) == 0)
+        {
+            printf("Found the one to remove!\n");
+            //remove it
+            previous->next = current->next;
+            current->next->previous = previous;
+            current->next = NULL;
+            current->previous = NULL;
+            return 0;
+        }
+        previous = current;
+        current = current->next;
+        
+    }
+    printf("Couldn't find the one to remove :C\n");
+    
+    return -1;
+}
+
+// initialize node and it's pointers
+void init_node(void *data, NODE *new_node)
+{
+    if(data == NULL)
+    {
+        fprintf(stderr, "Data is empty. Creating empty Node\n");
+    }
     new_node->data = data;
     new_node->next = NULL;
     new_node->previous = NULL;
 }
 
-void print_list(NODE *head, void (func)(void *))
+// print the contents of the linked list using
+// user-defined function pointer
+int print_list(NODE *head, void (func)(void *))
 {
- 
     NODE *tmp = malloc(sizeof(NODE));
+
     tmp = head;
     if(tmp == NULL)
     {
-        printf("NULL\n");
-        return;
+        fprintf(stderr, "head node is NULL; \
+                    possible error with malloc\n");
+        return -1;
     }
     while(tmp != NULL)
     {
         (func)((tmp->data));
         tmp = tmp->next;
     }
+    free(tmp);
+    return 0;
 }
 
 
